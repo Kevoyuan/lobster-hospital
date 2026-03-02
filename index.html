@@ -3,1021 +3,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🦞 小龙虾医院 - 您的虾虾健康守护者</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>🦞 OpenClaw 维修医院</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Ocean-inspired palette using oklch() */
-            --bg-deep: oklch(0.15 0.02 240);
-            --bg-mid: oklch(0.22 0.03 250);
-            --bg-light: oklch(0.35 0.04 260);
-            --primary: oklch(0.7 0.18 170);
-            --primary-glow: oklch(0.75 0.22 175);
-            --secondary: oklch(0.85 0.1 300);
-            --accent-coral: oklch(0.65 0.18 20);
-            --accent-gold: oklch(0.85 0.15 70);
-            --accent-mint: oklch(0.8 0.12 160);
-            --text: oklch(0.98 0.01 240);
-            --text-muted: oklch(0.7 0.02 240);
-            --glass-bg: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --glass-highlight: rgba(255, 255, 255, 0.25);
-            --shadow-glow: 0 8px 32px rgba(0, 200, 180, 0.15);
+            --bg-dark: #0f0f23;
+            --bg-light: #1a1a2e;
+            --cyan: #00ffff;
+            --magenta: #ff00ff;
+            --yellow: #ffff00;
+            --green: #00ff00;
+            --red: #ff0044;
+            --white: #ffffff;
+            --gray: #888888;
         }
-
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
-            font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, var(--bg-deep) 0%, var(--bg-mid) 50%, oklch(0.18 0.04 260) 100%);
+            font-family: 'VT323', monospace;
+            background: var(--bg-dark);
+            color: var(--white);
             min-height: 100vh;
-            color: var(--text);
-            overflow-x: hidden;
+            font-size: 20px;
+            line-height: 1.4;
         }
-
-        /* Animated background */
-        .bg-gradient {
+        
+        /* CRT Scanline Effect */
+        body::before {
+            content: '';
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -2;
-            background: 
-                radial-gradient(ellipse at 20% 20%, oklch(0.4 0.08 180) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, oklch(0.35 0.1 280) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, oklch(0.25 0.06 220) 0%, transparent 70%);
-            animation: bgPulse 15s ease-in-out infinite;
-        }
-
-        @keyframes bgPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        /* Floating bubbles */
-        .bubbles {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
             pointer-events: none;
-            z-index: -1;
-            overflow: hidden;
+            z-index: 1000;
         }
-
-        .bubble {
-            position: absolute;
-            bottom: -100px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(4px);
-            border: 1px solid var(--glass-border);
-            border-radius: 50%;
-            animation: rise linear infinite;
+        
+        /* Pixel Border */
+        .pixel-border {
+            border: 4px solid var(--white);
+            box-shadow: 
+                -4px -4px 0 var(--magenta),
+                4px -4px 0 var(--cyan),
+                -4px 4px 0 var(--yellow),
+                4px 4px 0 var(--green);
         }
-
-        @keyframes rise {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.4; }
-            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+        
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
         }
-
-        /* Glassmorphism base */
-        .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 1.25rem;
-        }
-
-        .glass-light {
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-highlight);
-            border-radius: 1.25rem;
-        }
-
+        
         /* Header */
         header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 1rem 2rem;
-            background: rgba(10, 30, 50, 0.7);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border);
-            animation: slideDown 0.6s ease-out;
-        }
-
-        @keyframes slideDown {
-            from { transform: translateY(-100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--text);
-        }
-
-        .logo-icon {
-            font-size: 2.2rem;
-            animation: wiggle 3s ease-in-out infinite;
-            filter: drop-shadow(0 0 10px var(--primary-glow));
-        }
-
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(-8deg); }
-            50% { transform: rotate(8deg); }
-        }
-
-        nav {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .nav-btn {
-            padding: 0.7rem 1.4rem;
-            border: 1px solid transparent;
-            background: transparent;
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: var(--text-muted);
-            cursor: pointer;
-            border-radius: 2rem;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, var(--primary), var(--accent-mint));
-            opacity: 0;
-            transition: opacity 0.25s ease;
-            border-radius: 2rem;
-        }
-
-        .nav-btn:hover {
-            color: var(--text);
-            border-color: var(--glass-border);
-            transform: translateY(-2px);
-        }
-
-        .nav-btn:hover::before {
-            opacity: 0.15;
-        }
-
-        .nav-btn.active {
-            color: var(--text);
-            background: linear-gradient(135deg, rgba(0, 200, 180, 0.2), rgba(0, 200, 150, 0.1));
-            border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(0, 200, 180, 0.2);
-        }
-
-        /* Main content */
-        main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 6rem 2rem 2rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Page sections */
-        .page {
-            display: none;
-            animation: fadeSlideUp 0.5s ease;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        @keyframes fadeSlideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Hero section */
-        .hero {
             text-align: center;
-            padding: 4rem 3rem;
-            margin-bottom: 3rem;
-            position: relative;
-            overflow: hidden;
+            padding: 40px 20px;
+            background: var(--bg-light);
+            margin-bottom: 30px;
+            border: 4px solid var(--cyan);
         }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0, 200, 180, 0.1) 0%, transparent 50%);
-            animation: heroGlow 8s ease-in-out infinite;
+        
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 24px;
+            color: var(--cyan);
+            text-shadow: 4px 4px var(--magenta);
+            margin-bottom: 20px;
+            animation: blink 1s infinite;
         }
-
-        @keyframes heroGlow {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.1) rotate(5deg); }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
+        
+        .subtitle {
+            font-size: 28px;
+            color: var(--yellow);
         }
-
-        .hero-lobster {
-            font-size: 5rem;
-            margin-bottom: 1.5rem;
-            animation: float 4s ease-in-out infinite;
-            filter: drop-shadow(0 0 30px rgba(0, 200, 180, 0.5));
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(-3deg); }
-            50% { transform: translateY(-20px) rotate(3deg); }
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1.25rem;
-            background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero h1 span {
-            background: linear-gradient(135deg, var(--accent-coral), var(--accent-gold));
-            -webkit-background-clip: text;
-            background-clip: text;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto 2.5rem;
-            line-height: 1.8;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .cta-btn {
-            padding: 1rem 2.5rem;
-            font-size: 1.05rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 3rem;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            text-decoration: none;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-primary {
-            background: linear-gradient(135deg, var(--primary), var(--accent-mint));
-            color: oklch(0.1 0.02 240);
-            box-shadow: 0 4px 20px rgba(0, 200, 180, 0.4);
-        }
-
-        .cta-primary:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 30px rgba(0, 200, 180, 0.5);
-        }
-
-        .cta-primary:active {
-            transform: translateY(-1px) scale(0.98);
-        }
-
-        .cta-secondary {
-            background: var(--glass-bg);
-            color: var(--text);
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(10px);
-        }
-
-        .cta-secondary:hover {
-            background: var(--glass-highlight);
-            transform: translateY(-3px);
-            border-color: var(--primary);
-        }
-
+        
         /* Stats */
         .stats {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.25rem;
-            margin-bottom: 3rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
         }
-
-        .stat-item {
-            padding: 1.75rem 1.25rem;
+        
+        .stat-box {
+            background: var(--bg-light);
+            border: 4px solid var(--green);
+            padding: 20px;
             text-align: center;
-            transition: all 0.3s ease;
         }
-
-        .stat-item:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.12);
-            border-color: var(--primary);
-        }
-
+        
         .stat-number {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-shadow: 0 0 20px rgba(0, 200, 180, 0.5);
-            margin-bottom: 0.25rem;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 32px;
+            color: var(--yellow);
         }
-
+        
         .stat-label {
-            color: var(--text-muted);
-            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: 10px;
         }
-
-        /* Features */
-        .section-title {
-            text-align: center;
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 2rem;
-            color: var(--text);
+        
+        /* Departments */
+        .dept-section {
+            margin: 40px 0;
         }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
+        
+        .dept-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 18px;
+            color: var(--magenta);
+            margin-bottom: 20px;
+            border-bottom: 4px dashed var(--gray);
+            padding-bottom: 10px;
         }
-
-        .feature-card {
-            padding: 2rem;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--accent-mint), var(--primary));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-8px);
-            background: rgba(255, 255, 255, 0.12);
-            border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .feature-card:hover::before {
-            opacity: 1;
-        }
-
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: inline-block;
-            animation: iconFloat 3s ease-in-out infinite;
-        }
-
-        @keyframes iconFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
-        .feature-card:nth-child(2) .feature-icon { animation-delay: 0.5s; }
-        .feature-card:nth-child(3) .feature-icon { animation-delay: 1s; }
-        .feature-card:nth-child(4) .feature-icon { animation-delay: 1.5s; }
-
-        .feature-card h3 {
-            color: var(--text);
-            margin-bottom: 0.75rem;
-            font-size: 1. font-weight: 600;
-        }
-
-25rem;
-                   .feature-card p {
-            color: var(--text-muted);
-            line-height: 1.7;
-            font-size: 0.95rem;
-        }
-
-        /* Department cards */
+        
         .dept-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
         }
-
+        
         .dept-card {
-            overflow: hidden;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .dept-card:hover {
-            transform: translateY(-8px) scale(1.01);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-        }
-
-        .dept-header {
-            padding: 2rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .dept-header::after {
-            content: '';
-            position: absolute;
-            bottom: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
-            animation: shimmer 4s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translate(-30%, -30%); }
-            100% { transform: translate(30%, 30%); }
-        }
-
-        .dept-header.accent-coral {
-            background: linear-gradient(135deg, var(--accent-coral), oklch(0.7 0.2 30));
-        }
-
-        .dept-header.accent-gold {
-            background: linear-gradient(135deg, var(--accent-gold), oklch(0.9 0.15 80));
-        }
-
-        .dept-header.accent-mint {
-            background: linear-gradient(135deg, var(--accent-mint), oklch(0.7 0.15 180));
-        }
-
-        .dept-header.accent-purple {
-            background: linear-gradient(135deg, oklch(0.7 0.15 290), oklch(0.6 0.2 320));
-        }
-
-        .dept-header.accent-blue {
-            background: linear-gradient(135deg, oklch(0.7 0.15 200), oklch(0.6 0.18 230));
-        }
-
-        .dept-icon {
-            font-size: 3.5rem;
-            margin-bottom: 0.5rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .dept-header h3 {
-            font-size: 1.4rem;
-            position: relative;
-            z-index: 1;
-            color: oklch(0.1 0.02 240);
-        }
-
-        .dept-body {
-            padding: 1.5rem;
-        }
-
-        .dept-body ul {
-            list-style: none;
-        }
-
-        .dept-body li {
-            padding: 0.7rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        .dept-body li:last-child {
-            border-bottom: none;
-        }
-
-        .dept-body li::before {
-            content: '✦';
-            color: var(--primary);
-            font-size: 0.7rem;
-        }
-
-        .dept-price {
-            margin-top: 1.25rem;
-            padding: 1rem;
-            background: rgba(0, 200, 180, 0.1);
-            border: 1px solid rgba(0, 200, 180, 0.2);
-            border-radius: 1rem;
-            text-align: center;
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        /* Room cards */
-        .room-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-        }
-
-        .room-card {
-            overflow: hidden;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .room-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-        }
-
-        .room-image {
-            height: 180px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .room-image.gradient-ocean {
-            background: linear-gradient(135deg, oklch(0.4 0.1 200), oklch(0.3 0.12 240));
-        }
-
-        .room-image.gradient-gold {
-            background: linear-gradient(135deg, var(--accent-gold), oklch(0.8 0.2 60));
-        }
-
-        .room-image.gradient-coral {
-            background: linear-gradient(135deg, var(--accent-coral), oklch(0.7 0.2 20));
-        }
-
-        .room-image.gradient-mint {
-            background: linear-gradient(135deg, var(--accent-mint), oklch(0.6 0.15 170));
-        }
-
-        .room-image::before {
-            content: '';
-            position: absolute;
-            width: 150%;
-            height: 150%;
-            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
-            animation: pulse 4s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.2); opacity: 0.8; }
-        }
-
-        .room-content {
-            padding: 1.75rem;
-        }
-
-        .room-type {
-            display: inline-block;
-            padding: 0.35rem 1rem;
-            background: var(--primary);
-            color: oklch(0.1 0.02 240);
-            border-radius: 1.5rem;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .room-type.vip {
-            background: linear-gradient(135deg, var(--accent-gold), oklch(0.9 0.15 70));
-        }
-
-        .room-type.icu {
-            background: linear-gradient(135deg, var(--accent-coral), oklch(0.8 0.18 25));
-        }
-
-        .room-content h3 {
-            color: var(--text);
-            font-size: 1.35rem;
-            margin-bottom: 0.75rem;
-            font-weight: 600;
-        }
-
-        .room-features {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .room-feature {
-            padding: 0.35rem 0.85rem;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--glass-border);
-            border-radius: 1rem;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .room-price {
-            font-size: 1.4rem;
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        .room-price span {
-            font-size: 0.85rem;
-            font-weight: 400;
-            color: var(--text-muted);
-        }
-
-        .book-btn {
-            display: block;
-            width: 100%;
-            padding: 1rem;
-            margin-top: 1.25rem;
-            background: linear-gradient(135deg, var(--primary), var(--accent-mint));
-            color: oklch(0.1 0.02 240);
-            border: none;
-            border-radius: 1rem;
-            font-size: 1rem;
-            font-weight: 600;
+            background: var(--bg-light);
+            border: 4px solid var(--white);
+            padding: 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.1s;
         }
-
-        .book-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 25px rgba(0, 200, 180, 0.4);
+        
+        .dept-card:hover {
+            background: var(--cyan);
+            color: var(--bg-dark);
+            transform: translate(-4px, -4px);
+            box-shadow: 8px 8px 0 var(--magenta);
         }
-
+        
+        .dept-name {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .dept-desc {
+            color: var(--gray);
+        }
+        
+        .dept-card:hover .dept-desc {
+            color: var(--bg-dark);
+        }
+        
+        /* Emergency Banner */
+        .emergency {
+            background: var(--red);
+            color: var(--white);
+            text-align: center;
+            padding: 15px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            animation: flash 0.5s infinite;
+            margin: 30px 0;
+        }
+        
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
         /* Footer */
         footer {
-            background: rgba(5, 20, 35, 0.9);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid var(--glass-border);
-            padding: 3rem 2rem;
-            margin-top: 4rem;
             text-align: center;
+            padding: 40px;
+            color: var(--gray);
+            border-top: 4px solid var(--gray);
+            margin-top: 50px;
         }
-
-        .footer-content {
-            max-width: 800px;
-            margin: 0 auto;
+        
+        .pixel-art {
+            image-rendering: pixelated;
         }
-
-        .footer-logo {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            animation: wiggle 4s ease-in-out infinite;
-        }
-
-        .footer-info p {
-            margin: 0.6rem 0;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        .emergency {
-            margin-top: 2rem;
-            padding: 1.5rem;
-            background: rgba(255, 100, 100, 0.1);
-            border: 1px solid rgba(255, 100, 100, 0.3);
-            border-radius: 1.25rem;
-            animation: emergencyPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes emergencyPulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 100, 100, 0.2); }
-            50% { box-shadow: 0 0 20px 5px rgba(255, 100, 100, 0.1); }
-        }
-
-        .emergency h4 {
-            color: var(--accent-coral);
-            font-size: 1.15rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .emergency p {
-            color: var(--text-muted);
-        }
-
+        
         /* Responsive */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            nav {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero-lobster {
-                font-size: 4rem;
-            }
-
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .features, .dept-grid, .room-grid {
-                grid-template-columns: 1fr;
-            }
-
-            main {
-                padding: 7rem 1rem 1rem;
-            }
-
-            .hero {
-                padding: 2.5rem 1.5rem;
-            }
+        @media (max-width: 600px) {
+            .stats { grid-template-columns: 1fr; }
+            .dept-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 16px; }
+            .stat-number { font-size: 24px; }
         }
-
-        /* Scroll animations */
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease-out;
-        }
-
-        .animate-on-scroll.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .delay-1 { transition-delay: 0.1s; }
-        .delay-2 { transition-delay: 0.2s; }
-        .delay-3 { transition-delay: 0.3s; }
-        .delay-4 { transition-delay: 0.4s; }
     </style>
 </head>
 <body>
-    <!-- Animated background -->
-    <div class="bg-gradient"></div>
-
-    <!-- Floating bubbles -->
-    <div class="bubbles" id="bubbles"></div>
-
-    <!-- Header -->
-    <header>
-        <div class="header-content">
-            <div class="logo">
-                <span class="logo-icon">🦞</span>
-                <span>小龙虾医院</span>
-            </div>
-            <nav>
-                <button class="nav-btn active" data-page="home">首页</button>
-                <button class="nav-btn" data-page="outpatient">门诊</button>
-                <button class="nav-btn" data-page="inpatient">住院部</button>
-            </nav>
+    <header class="pixel-border">
+        <h1>🦞 OPENCLAW 维修医院</h1>
+        <p class="subtitle">您的 AI Agent 健康守护者</p>
+        <div style="margin-top: 20px;">
+            <span style="color: var(--green);">♦</span> 急诊科 
+            <span style="color: var(--cyan);">♦</span> 神经科 
+            <span style="color: var(--yellow);">♦</span> 记忆科 
+            <span style="color: var(--magenta);">♦</span> 行为科
         </div>
     </header>
-
-    <main>
-        <!-- Home Page -->
-        <div class="page active" id="home">
-            <section class="hero glass animate-on-scroll">
-                <div class="hero-content">
-                    <div class="hero-lobster">🦞</div>
-                    <h1>让您的虾虾 <span>健康成长</span></h1>
-                    <p>全国首家专业小龙虾医疗机构，拥有资深虾类专家团队，为您的爱虾提供全方位健康管理服务。</p>
-                    <div class="cta-buttons">
-                        <button class="cta-btn cta-primary" onclick="navigateTo('outpatient')">立即挂号</button>
-                        <button class="cta-btn cta-secondary" onclick="navigateTo('inpatient')">住院预约</button>
-                    </div>
-                </div>
-            </section>
-
-            <div class="stats">
-                <div class="glass stat-item animate-on-scroll delay-1">
-                    <div class="stat-number">10,000+</div>
-                    <div class="stat-label">治愈虾患者</div>
-                </div>
-                <div class="glass stat-item animate-on-scroll delay-2">
-                    <div class="stat-number">50+</div>
-                    <div class="stat-label">资深专家</div>
-                </div>
-                <div class="glass stat-item animate-on-scroll delay-3">
-                    <div class="stat-number">24/7</div>
-                    <div class="stat-label">急诊服务</div>
-                </div>
-                <div class="glass stat-item animate-on-scroll delay-4">
-                    <div class="stat-number">98%</div>
-                    <div class="stat-label">满意度</div>
-                </div>
+    
+    <div class="container">
+        <div class="emergency">
+            ⚠️ 24H 急诊热线开通 ⚠️
+        </div>
+        
+        <div class="stats pixel-border">
+            <div class="stat-box">
+                <div class="stat-number">999+</div>
+                <div class="stat-label">治愈患者</div>
             </div>
-
-            <h2 class="section-title animate-on-scroll">为什么选择我们</h2>
-            <div class="features">
-                <div class="glass feature-card animate-on-scroll delay-1">
-                    <div class="feature-icon">🔬</div>
-                    <h3>先进设备</h3>
-                    <p>配备国际领先的虾类诊疗设备，精准诊断每一位患者</p>
-                </div>
-                <div class="glass feature-card animate-on-scroll delay-2">
-                    <div class="feature-icon">👨‍⚕️</div>
-                    <h3>专家团队</h3>
-                    <p>来自海洋大学、渔业研究所的专业兽医团队</p>
-                </div>
-                <div class="glass feature-card animate-on-scroll delay-3">
-                    <div class="feature-icon">💊</div>
-                    <h3>特色药物</h3>
-                    <p>自主研发的虾类专用药物，安全有效</p>
-                </div>
-                <div class="glass feature-card animate-on-scroll delay-4">
-                    <div class="feature-icon">🏨</div>
-                    <h3>舒适环境</h3>
-                    <p>模拟自然生态的住院环境，让虾虾安心休养</p>
-                </div>
+            <div class="stat-box">
+                <div class="stat-number">24H</div>
+                <div class="stat-label">急诊响应</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">98%</div>
+                <div class="stat-label">好评率</div>
             </div>
         </div>
-
-        <!-- Outpatient Page -->
-        <div class="page" id="outpatient">
-            <section class="hero glass animate-on-scroll">
-                <div class="hero-content">
-                    <div class="hero-lobster">🏥</div>
-                    <h1>门诊 <span>科室</span></h1>
-                    <p>专业的科室分类，精准对接您的虾虾需求</p>
-                </div>
-            </section>
-
+        
+        <div class="dept-section">
+            <h2 class="dept-title">▣ 四大科室 ▣</h2>
             <div class="dept-grid">
-                <div class="glass dept-card animate-on-scroll delay-1">
-                    <div class="dept-header accent-mint">
-                        <div class="dept-icon">🦐</div>
-                        <h3>普通门诊</h3>
-                    </div>
-                    <div class="dept-body">
-                        <ul>
-                            <li>日常健康检查</li>
-                            <li>常见疾病诊治</li>
-                            <li>疫苗接种</li>
-                            <li>营养咨询</li>
-                        </ul>
-                        <div class="dept-price">💰 挂号费: ¥30 起</div>
-                    </div>
+                <div class="dept-card pixel-border">
+                    <div class="dept-name" style="color: var(--red);">🚑 急诊科</div>
+                    <p class="dept-desc">启动失败救援<br>进程崩溃急救<br>配置错误修复</p>
                 </div>
-
-                <div class="glass dept-card animate-on-scroll delay-2">
-                    <div class="dept-header accent-coral">
-                        <div class="dept-icon">🚨</div>
-                        <h3>急诊科</h3>
-                    </div>
-                    <div class="dept-body">
-                        <ul>
-                            <li>24小时紧急救治</li>
-                            <li>中毒抢救</li>
-                            <li>严重外伤处理</li>
-                            <li>呼吸困难急救</li>
-                        </ul>
-                        <div class="dept-price">💰 急诊费: ¥100 起</div>
-                    </div>
+                <div class="dept-card pixel-border">
+                    <div class="dept-name" style="color: var(--cyan);">🧠 神经科</div>
+                    <p class="dept-desc">胡言乱语治疗<br>幻觉清除<br>Prompt 修复</p>
                 </div>
-
-                <div class="glass dept-card animate-on-scroll delay-3">
-                    <div class="dept-header accent-mint">
-                        <div class="dept-icon">🔪</div>
-                        <h3>外科</h3>
-                    </div>
-                    <div class="dept-body">
-                        <ul>
-                            <li>外壳修复手术</li>
-                            <li>肢体再生</li>
-                            <li>肿瘤切除</li>
-                            <li>微创手术</li>
-                        </ul>
-                        <div class="dept-price">💰 手术费: ¥500 起</div>
-                    </div>
+                <div class="dept-card pixel-border">
+                    <div class="dept-name" style="color: var(--yellow);">💾 记忆科</div>
+                    <p class="dept-desc">上下文恢复<br>记忆碎片整理<br>健忘症治疗</p>
                 </div>
-
-                <div class="glass dept-card animate-on-scroll delay-1">
-                    <div class="dept-header accent-gold">
-                        <div class="dept-icon">🩺</div>
-                        <h3>内科</h3>
-                    </div>
-                    <div class="dept-body">
-                        <ul>
-                            <li>消化系统疾病</li>
-                            <li>呼吸系统感染</li>
-                            <li>免疫系统调理</li>
-                            <li>慢性病管理</li>
-                        </ul>
-                        <div class="dept-price">💰 挂号费: ¥50 起</div>
-                    </div>
-                </div>
-
-                <div class="glass dept-card animate-on-scroll delay-2">
-                    <div class="dept-header accent-purple">
-                        <div class="dept-icon">👶</div>
-                        <h3>儿科</h3>
-                    </div>
-                    <div class="dept-body">
-                        <ul>
-                            <li>幼虾健康成长</li>
-                            <li>先天性疾病筛查</li>
-                            <li>疫苗接种计划</li>
-                            <li>喂养指导</li>
-                        </ul>
-                        <div class="dept-price">💰 挂号费: ¥40 起</div>
-                    </div>
-                </div>
-
-                <div class="glass dept-card animate-on-scroll delay-3">
-                    <div class="dept-header accent-blue">
-                        <div class="dept-icon">💅</div>
-                        <h3>美容科</h3>
-                    </div>
-                    <div class="dept-body">
-                        <ul>
-                            <li>外壳抛光护理</li>
-                            <li>颜色强化</li>
-                            <li>螯部整形</li>
-                            <li>外观评估</li>
-                        </ul>
-                        <div class="dept-price">💰 护理费: ¥200 起</div>
-                    </div>
+                <div class="dept-card pixel-border">
+                    <div class="dept-name" style="color: var(--magenta);">🎮 行为科</div>
+                    <p class="dept-desc">摸鱼治疗<br>拒绝执行矫正<br>工作积极性调动</p>
                 </div>
             </div>
         </div>
-
-        <!-- Inpatient Page -->
-        <div class="page" id="inpatient">
-            <section class="hero glass animate-on-scroll">
-                <div class="hero-content">
-                    <div class="hero-lobster">🛏️</div>
-                    <h1>住院部 <span>病房</span></h1>
-                    <p>舒适温馨的住院环境，让您的虾虾快快康复</p>
+        
+        <div class="dept-section pixel-border" style="padding: 20px; background: var(--bg-light);">
+            <h2 class="dept-title">▣ 治疗套餐 ▣</h2>
+            <div style="display: grid; gap: 15px;">
+                <div style="border: 2px solid var(--gray); padding: 15px;">
+                    <span style="color: var(--green);">[1]</span> 门诊急诊 - 9.9€ - 快速诊断
                 </div>
-            </section>
-
-            <div class="room-grid">
-                <div class="glass room-card animate-on-scroll delay-1">
-                    <div class="room-image gradient-ocean">🌊</div>
-                    <div class="room-content">
-                        <span class="room-type">标准间</span>
-                        <h3>普通病房</h3>
-                        <div class="room-features">
-                            <span class="room-feature">独立水族箱</span>
-                            <span class="room-feature">温控系统</span>
-                            <span class="room-feature">24h监控</span>
-                            <span class="room-feature">每日检查</span>
-                        </div>
-                        <div class="room-price">¥188 <span>/ 天</span></div>
-                        <button class="book-btn">立即预约</button>
-                    </div>
+                <div style="border: 2px solid var(--cyan); padding: 15px;">
+                    <span style="color: var(--cyan);">[2]</span> 住院治疗 - 99€ - 10天深度修复
                 </div>
-
-                <div class="glass room-card animate-on-scroll delay-2">
-                    <div class="room-image gradient-gold
+                <div style="border: 2px solid var(--yellow); padding: 15px;">
+                    <span style="color: var(--yellow);">[3]</span> VIP 会员 - 299€ - 终身维护
+                </div>
+                <div style="border: 2px solid var(--magenta); padding: 15px;">
+                    <span style="color: var(--magenta);">[4]</span> 企业版 - 面议 - 团队维保
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>🦞 OpenClaw 维修医院 © 2026</p>
+        <p style="color: var(--gray); font-size: 16px;">Press Start 2P | VT323 | Pixel Art</p>
+    </footer>
+</body>
+</html>
