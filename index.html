@@ -4,18 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🦞 小龙虾医院 - 您的虾虾健康守护者</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --ocean-deep: #0a4d68;
-            --ocean-mid: #088395;
-            --ocean-light: #05bfdb;
-            --ocean-foam: #00fffc;
-            --coral: #ff6b6b;
-            --sand: #f7f1e3;
-            --seaweed: #2d6a4f;
-            --shell: #e9c46a;
-            --pearl: #f8f9fa;
+            /* Ocean-inspired palette using oklch() */
+            --bg-deep: oklch(0.15 0.02 240);
+            --bg-mid: oklch(0.22 0.03 250);
+            --bg-light: oklch(0.35 0.04 260);
+            --primary: oklch(0.7 0.18 170);
+            --primary-glow: oklch(0.75 0.22 175);
+            --secondary: oklch(0.85 0.1 300);
+            --accent-coral: oklch(0.65 0.18 20);
+            --accent-gold: oklch(0.85 0.15 70);
+            --accent-mint: oklch(0.8 0.12 160);
+            --text: oklch(0.98 0.01 240);
+            --text-muted: oklch(0.7 0.02 240);
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-highlight: rgba(255, 255, 255, 0.25);
+            --shadow-glow: 0 8px 32px rgba(0, 200, 180, 0.15);
         }
 
         * {
@@ -25,13 +34,34 @@
         }
 
         body {
-            font-family: 'Noto Sans SC', sans-serif;
-            background: linear-gradient(180deg, var(--ocean-deep) 0%, var(--ocean-mid) 50%, var(--ocean-light) 100%);
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, var(--bg-deep) 0%, var(--bg-mid) 50%, oklch(0.18 0.04 260) 100%);
             min-height: 100vh;
-            color: #333;
+            color: var(--text);
+            overflow-x: hidden;
         }
 
-        /* Floating bubbles animation */
+        /* Animated background */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: 
+                radial-gradient(ellipse at 20% 20%, oklch(0.4 0.08 180) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, oklch(0.35 0.1 280) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, oklch(0.25 0.06 220) 0%, transparent 70%);
+            animation: bgPulse 15s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Floating bubbles */
         .bubbles {
             position: fixed;
             width: 100%;
@@ -39,33 +69,61 @@
             top: 0;
             left: 0;
             pointer-events: none;
-            z-index: 0;
+            z-index: -1;
             overflow: hidden;
         }
 
         .bubble {
             position: absolute;
             bottom: -100px;
-            background: rgba(255, 255, 255, 0.15);
+            background: var(--glass-bg);
+            backdrop-filter: blur(4px);
+            border: 1px solid var(--glass-border);
             border-radius: 50%;
             animation: rise linear infinite;
         }
 
         @keyframes rise {
             0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0.6; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Glassmorphism base */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.25rem;
+        }
+
+        .glass-light {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-highlight);
+            border-radius: 1.25rem;
         }
 
         /* Header */
         header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 2rem;
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
             z-index: 100;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+            background: rgba(10, 30, 50, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .header-content {
@@ -79,20 +137,21 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 1.8rem;
+            gap: 0.75rem;
+            font-size: 1.6rem;
             font-weight: 700;
-            color: var(--ocean-deep);
+            color: var(--text);
         }
 
         .logo-icon {
-            font-size: 2.5rem;
-            animation: wiggle 2s ease-in-out infinite;
+            font-size: 2.2rem;
+            animation: wiggle 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px var(--primary-glow));
         }
 
         @keyframes wiggle {
-            0%, 100% { transform: rotate(-5deg); }
-            50% { transform: rotate(5deg); }
+            0%, 100% { transform: rotate(-8deg); }
+            50% { transform: rotate(8deg); }
         }
 
         nav {
@@ -101,15 +160,15 @@
         }
 
         .nav-btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
+            padding: 0.7rem 1.4rem;
+            border: 1px solid transparent;
             background: transparent;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 500;
-            color: var(--ocean-deep);
+            color: var(--text-muted);
             cursor: pointer;
-            border-radius: 25px;
-            transition: all 0.3s ease;
+            border-radius: 2rem;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
@@ -117,31 +176,35 @@
         .nav-btn::before {
             content: '';
             position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 3px;
-            background: var(--ocean-light);
-            transition: width 0.3s ease;
-            border-radius: 2px;
+            inset: 0;
+            background: linear-gradient(135deg, var(--primary), var(--accent-mint));
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            border-radius: 2rem;
         }
 
-        .nav-btn:hover::before,
-        .nav-btn.active::before {
-            width: 80%;
+        .nav-btn:hover {
+            color: var(--text);
+            border-color: var(--glass-border);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:hover::before {
+            opacity: 0.15;
         }
 
         .nav-btn.active {
-            color: var(--ocean-mid);
-            background: rgba(8, 131, 149, 0.1);
+            color: var(--text);
+            background: linear-gradient(135deg, rgba(0, 200, 180, 0.2), rgba(0, 200, 150, 0.1));
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 200, 180, 0.2);
         }
 
         /* Main content */
         main {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 6rem 2rem 2rem;
             position: relative;
             z-index: 1;
         }
@@ -149,55 +212,82 @@
         /* Page sections */
         .page {
             display: none;
-            animation: fadeIn 0.5s ease;
+            animation: fadeSlideUp 0.5s ease;
         }
 
         .page.active {
             display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         /* Hero section */
         .hero {
             text-align: center;
-            padding: 4rem 2rem;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 30px;
-            margin-bottom: 2rem;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            padding: 4rem 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 200, 180, 0.1) 0%, transparent 50%);
+            animation: heroGlow 8s ease-in-out infinite;
+        }
+
+        @keyframes heroGlow {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-lobster {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            animation: float 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(0, 200, 180, 0.5));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-3deg); }
+            50% { transform: translateY(-20px) rotate(3deg); }
         }
 
         .hero h1 {
             font-size: 3rem;
-            color: var(--ocean-deep);
-            margin-bottom: 1rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .hero h1 span {
-            color: var(--coral);
+            background: linear-gradient(135deg, var(--accent-coral), var(--accent-gold));
+            -webkit-background-clip: text;
+            background-clip: text;
         }
 
         .hero p {
-            font-size: 1.3rem;
-            color: #666;
+            font-size: 1.2rem;
+            color: var(--text-muted);
             max-width: 600px;
-            margin: 0 auto 2rem;
+            margin: 0 auto 2.5rem;
             line-height: 1.8;
-        }
-
-        .hero-lobster {
-            font-size: 6rem;
-            margin-bottom: 1rem;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
         }
 
         .cta-buttons {
@@ -209,134 +299,225 @@
 
         .cta-btn {
             padding: 1rem 2.5rem;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 600;
             border: none;
-            border-radius: 30px;
+            border-radius: 3rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
+            position: relative;
+            overflow: hidden;
         }
 
         .cta-primary {
-            background: linear-gradient(135deg, var(--ocean-light), var(--ocean-mid));
-            color: white;
-            box-shadow: 0 8px 25px rgba(8, 131, 149, 0.4);
+            background: linear-gradient(135deg, var(--primary), var(--accent-mint));
+            color: oklch(0.1 0.02 240);
+            box-shadow: 0 4px 20px rgba(0, 200, 180, 0.4);
         }
 
         .cta-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(8, 131, 149, 0.5);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(0, 200, 180, 0.5);
+        }
+
+        .cta-primary:active {
+            transform: translateY(-1px) scale(0.98);
         }
 
         .cta-secondary {
-            background: white;
-            color: var(--ocean-mid);
-            border: 2px solid var(--ocean-light);
+            background: var(--glass-bg);
+            color: var(--text);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
         }
 
         .cta-secondary:hover {
-            background: var(--ocean-light);
-            color: white;
-        }
-
-        /* Features */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-top: 3rem;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-        }
-
-        .feature-icon {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card h3 {
-            color: var(--ocean-deep);
-            margin-bottom: 0.75rem;
-            font-size: 1.3rem;
-        }
-
-        .feature-card p {
-            color: #666;
-            line-height: 1.6;
+            background: var(--glass-highlight);
+            transform: translateY(-3px);
+            border-color: var(--primary);
         }
 
         /* Stats */
         .stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-            margin: 3rem 0;
+            gap: 1.25rem;
+            margin-bottom: 3rem;
         }
 
         .stat-item {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 1.5rem;
-            border-radius: 20px;
+            padding: 1.75rem 1.25rem;
             text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--primary);
         }
 
         .stat-number {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 700;
-            color: var(--ocean-mid);
+            color: var(--primary);
+            text-shadow: 0 0 20px rgba(0, 200, 180, 0.5);
+            margin-bottom: 0.25rem;
         }
 
         .stat-label {
-            color: #666;
+            color: var(--text-muted);
             font-size: 0.9rem;
+        }
+
+        /* Features */
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--text);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            padding: 2rem;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent-mint), var(--primary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .feature-card:nth-child(2) .feature-icon { animation-delay: 0.5s; }
+        .feature-card:nth-child(3) .feature-icon { animation-delay: 1s; }
+        .feature-card:nth-child(4) .feature-icon { animation-delay: 1.5s; }
+
+        .feature-card h3 {
+            color: var(--text);
+            margin-bottom: 0.75rem;
+            font-size: 1. font-weight: 600;
+        }
+
+25rem;
+                   .feature-card p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-size: 0.95rem;
         }
 
         /* Department cards */
         .dept-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
         }
 
         .dept-card {
-            background: white;
-            border-radius: 25px;
             overflow: hidden;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .dept-card:hover {
-            transform: scale(1.02);
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
         }
 
         .dept-header {
             padding: 2rem;
-            background: linear-gradient(135deg, var(--ocean-light), var(--ocean-mid));
-            color: white;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dept-header::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+            animation: shimmer 4s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translate(-30%, -30%); }
+            100% { transform: translate(30%, 30%); }
+        }
+
+        .dept-header.accent-coral {
+            background: linear-gradient(135deg, var(--accent-coral), oklch(0.7 0.2 30));
+        }
+
+        .dept-header.accent-gold {
+            background: linear-gradient(135deg, var(--accent-gold), oklch(0.9 0.15 80));
+        }
+
+        .dept-header.accent-mint {
+            background: linear-gradient(135deg, var(--accent-mint), oklch(0.7 0.15 180));
+        }
+
+        .dept-header.accent-purple {
+            background: linear-gradient(135deg, oklch(0.7 0.15 290), oklch(0.6 0.2 320));
+        }
+
+        .dept-header.accent-blue {
+            background: linear-gradient(135deg, oklch(0.7 0.15 200), oklch(0.6 0.18 230));
         }
 
         .dept-icon {
-            font-size: 4rem;
+            font-size: 3.5rem;
             margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
         }
 
         .dept-header h3 {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
+            position: relative;
+            z-index: 1;
+            color: oklch(0.1 0.02 240);
         }
 
         .dept-body {
@@ -348,11 +529,13 @@
         }
 
         .dept-body li {
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #eee;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
         }
 
         .dept-body li:last-child {
@@ -360,87 +543,109 @@
         }
 
         .dept-body li::before {
-            content: '✓';
-            color: var(--ocean-light);
-            font-weight: bold;
+            content: '✦';
+            color: var(--primary);
+            font-size: 0.7rem;
         }
 
         .dept-price {
-            margin-top: 1rem;
+            margin-top: 1.25rem;
             padding: 1rem;
-            background: var(--sand);
-            border-radius: 15px;
+            background: rgba(0, 200, 180, 0.1);
+            border: 1px solid rgba(0, 200, 180, 0.2);
+            border-radius: 1rem;
             text-align: center;
             font-weight: 600;
-            color: var(--ocean-deep);
+            color: var(--primary);
         }
 
-        /* Inpatient rooms */
+        /* Room cards */
         .room-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
         }
 
         .room-card {
-            background: white;
-            border-radius: 25px;
             overflow: hidden;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .room-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
         }
 
         .room-image {
-            height: 200px;
-            background: linear-gradient(135deg, var(--ocean-light), var(--seaweed));
+            height: 180px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 5rem;
+            font-size: 4.5rem;
             position: relative;
             overflow: hidden;
+        }
+
+        .room-image.gradient-ocean {
+            background: linear-gradient(135deg, oklch(0.4 0.1 200), oklch(0.3 0.12 240));
+        }
+
+        .room-image.gradient-gold {
+            background: linear-gradient(135deg, var(--accent-gold), oklch(0.8 0.2 60));
+        }
+
+        .room-image.gradient-coral {
+            background: linear-gradient(135deg, var(--accent-coral), oklch(0.7 0.2 20));
+        }
+
+        .room-image.gradient-mint {
+            background: linear-gradient(135deg, var(--accent-mint), oklch(0.6 0.15 170));
         }
 
         .room-image::before {
             content: '';
             position: absolute;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
-            animation: shimmer 3s infinite;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
+            animation: pulse 4s ease-in-out infinite;
         }
 
-        @keyframes shimmer {
-            0% { transform: translate(-50%, -50%); }
-            100% { transform: translate(50%, 50%); }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
         }
 
         .room-content {
-            padding: 1.5rem;
+            padding: 1.75rem;
         }
 
         .room-type {
             display: inline-block;
-            padding: 0.4rem 1rem;
-            background: var(--ocean-light);
-            color: white;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
+            padding: 0.35rem 1rem;
+            background: var(--primary);
+            color: oklch(0.1 0.02 240);
+            border-radius: 1.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
             margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .room-type.vip {
-            background: var(--shell);
+            background: linear-gradient(135deg, var(--accent-gold), oklch(0.9 0.15 70));
         }
 
         .room-type.icu {
-            background: var(--coral);
+            background: linear-gradient(135deg, var(--accent-coral), oklch(0.8 0.18 25));
         }
 
         .room-content h3 {
-            color: var(--ocean-deep);
-            font-size: 1.4rem;
+            color: var(--text);
+            font-size: 1.35rem;
             margin-bottom: 0.75rem;
+            font-weight: 600;
         }
 
         .room-features {
@@ -451,34 +656,35 @@
         }
 
         .room-feature {
-            padding: 0.3rem 0.8rem;
-            background: var(--sand);
-            border-radius: 15px;
-            font-size: 0.85rem;
-            color: #666;
+            padding: 0.35rem 0.85rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
         }
 
         .room-price {
-            font-size: 1.5rem;
-            color: var(--ocean-mid);
+            font-size: 1.4rem;
+            color: var(--primary);
             font-weight: 700;
         }
 
         .room-price span {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 400;
-            color: #999;
+            color: var(--text-muted);
         }
 
         .book-btn {
             display: block;
             width: 100%;
             padding: 1rem;
-            margin-top: 1rem;
-            background: var(--ocean-mid);
-            color: white;
+            margin-top: 1.25rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent-mint));
+            color: oklch(0.1 0.02 240);
             border: none;
-            border-radius: 15px;
+            border-radius: 1rem;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
@@ -486,13 +692,15 @@
         }
 
         .book-btn:hover {
-            background: var(--ocean-deep);
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 200, 180, 0.4);
         }
 
         /* Footer */
         footer {
-            background: rgba(10, 77, 104, 0.95);
-            color: white;
+            background: rgba(5, 20, 35, 0.9);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
             padding: 3rem 2rem;
             margin-top: 4rem;
             text-align: center;
@@ -505,26 +713,38 @@
 
         .footer-logo {
             font-size: 2rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            animation: wiggle 4s ease-in-out infinite;
         }
 
         .footer-info p {
-            margin: 0.5rem 0;
-            opacity: 0.8;
+            margin: 0.6rem 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
         }
 
         .emergency {
             margin-top: 2rem;
             padding: 1.5rem;
-            background: rgba(255, 107, 107, 0.2);
-            border-radius: 15px;
-            border: 2px solid var(--coral);
+            background: rgba(255, 100, 100, 0.1);
+            border: 1px solid rgba(255, 100, 100, 0.3);
+            border-radius: 1.25rem;
+            animation: emergencyPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes emergencyPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 100, 100, 0.2); }
+            50% { box-shadow: 0 0 20px 5px rgba(255, 100, 100, 0.1); }
         }
 
         .emergency h4 {
-            color: var(--coral);
-            font-size: 1.2rem;
+            color: var(--accent-coral);
+            font-size: 1.15rem;
             margin-bottom: 0.5rem;
+        }
+
+        .emergency p {
+            color: var(--text-muted);
         }
 
         /* Responsive */
@@ -543,6 +763,10 @@
                 font-size: 2rem;
             }
 
+            .hero-lobster {
+                font-size: 4rem;
+            }
+
             .stats {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -550,10 +774,38 @@
             .features, .dept-grid, .room-grid {
                 grid-template-columns: 1fr;
             }
+
+            main {
+                padding: 7rem 1rem 1rem;
+            }
+
+            .hero {
+                padding: 2.5rem 1.5rem;
+            }
         }
+
+        /* Scroll animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
     </style>
 </head>
 <body>
+    <!-- Animated background -->
+    <div class="bg-gradient"></div>
+
     <!-- Floating bubbles -->
     <div class="bubbles" id="bubbles"></div>
 
@@ -565,9 +817,9 @@
                 <span>小龙虾医院</span>
             </div>
             <nav>
-                <button class="nav-btn active" data-page="home">🏠 首页</button>
-                <button class="nav-btn" data-page="outpatient">🏥 门诊</button>
-                <button class="nav-btn" data-page="inpatient">🛏️ 住院部</button>
+                <button class="nav-btn active" data-page="home">首页</button>
+                <button class="nav-btn" data-page="outpatient">门诊</button>
+                <button class="nav-btn" data-page="inpatient">住院部</button>
             </nav>
         </div>
     </header>
@@ -575,52 +827,55 @@
     <main>
         <!-- Home Page -->
         <div class="page active" id="home">
-            <section class="hero">
-                <div class="hero-lobster">🦞</div>
-                <h1>让您的虾虾 <span>健康成长</span></h1>
-                <p>全国首家专业小龙虾医疗机构，拥有资深虾类专家团队，为您的爱虾提供全方位健康管理服务。</p>
-                <div class="cta-buttons">
-                    <button class="cta-btn cta-primary" onclick="navigateTo('outpatient')">立即挂号</button>
-                    <button class="cta-btn cta-secondary" onclick="navigateTo('inpatient')">住院预约</button>
+            <section class="hero glass animate-on-scroll">
+                <div class="hero-content">
+                    <div class="hero-lobster">🦞</div>
+                    <h1>让您的虾虾 <span>健康成长</span></h1>
+                    <p>全国首家专业小龙虾医疗机构，拥有资深虾类专家团队，为您的爱虾提供全方位健康管理服务。</p>
+                    <div class="cta-buttons">
+                        <button class="cta-btn cta-primary" onclick="navigateTo('outpatient')">立即挂号</button>
+                        <button class="cta-btn cta-secondary" onclick="navigateTo('inpatient')">住院预约</button>
+                    </div>
                 </div>
             </section>
 
             <div class="stats">
-                <div class="stat-item">
+                <div class="glass stat-item animate-on-scroll delay-1">
                     <div class="stat-number">10,000+</div>
                     <div class="stat-label">治愈虾患者</div>
                 </div>
-                <div class="stat-item">
+                <div class="glass stat-item animate-on-scroll delay-2">
                     <div class="stat-number">50+</div>
                     <div class="stat-label">资深专家</div>
                 </div>
-                <div class="stat-item">
+                <div class="glass stat-item animate-on-scroll delay-3">
                     <div class="stat-number">24/7</div>
                     <div class="stat-label">急诊服务</div>
                 </div>
-                <div class="stat-item">
+                <div class="glass stat-item animate-on-scroll delay-4">
                     <div class="stat-number">98%</div>
                     <div class="stat-label">满意度</div>
                 </div>
             </div>
 
+            <h2 class="section-title animate-on-scroll">为什么选择我们</h2>
             <div class="features">
-                <div class="feature-card">
+                <div class="glass feature-card animate-on-scroll delay-1">
                     <div class="feature-icon">🔬</div>
                     <h3>先进设备</h3>
                     <p>配备国际领先的虾类诊疗设备，精准诊断每一位患者</p>
                 </div>
-                <div class="feature-card">
+                <div class="glass feature-card animate-on-scroll delay-2">
                     <div class="feature-icon">👨‍⚕️</div>
                     <h3>专家团队</h3>
                     <p>来自海洋大学、渔业研究所的专业兽医团队</p>
                 </div>
-                <div class="feature-card">
+                <div class="glass feature-card animate-on-scroll delay-3">
                     <div class="feature-icon">💊</div>
                     <h3>特色药物</h3>
                     <p>自主研发的虾类专用药物，安全有效</p>
                 </div>
-                <div class="feature-card">
+                <div class="glass feature-card animate-on-scroll delay-4">
                     <div class="feature-icon">🏨</div>
                     <h3>舒适环境</h3>
                     <p>模拟自然生态的住院环境，让虾虾安心休养</p>
@@ -630,15 +885,17 @@
 
         <!-- Outpatient Page -->
         <div class="page" id="outpatient">
-            <section class="hero">
-                <div class="hero-lobster">🏥</div>
-                <h1>门诊 <span>科室</span></h1>
-                <p>专业的科室分类，精准对接您的虾虾需求</p>
+            <section class="hero glass animate-on-scroll">
+                <div class="hero-content">
+                    <div class="hero-lobster">🏥</div>
+                    <h1>门诊 <span>科室</span></h1>
+                    <p>专业的科室分类，精准对接您的虾虾需求</p>
+                </div>
             </section>
 
             <div class="dept-grid">
-                <div class="dept-card">
-                    <div class="dept-header">
+                <div class="glass dept-card animate-on-scroll delay-1">
+                    <div class="dept-header accent-mint">
                         <div class="dept-icon">🦐</div>
                         <h3>普通门诊</h3>
                     </div>
@@ -653,8 +910,8 @@
                     </div>
                 </div>
 
-                <div class="dept-card">
-                    <div class="dept-header" style="background: linear-gradient(135deg, var(--coral), #ff8e8e);">
+                <div class="glass dept-card animate-on-scroll delay-2">
+                    <div class="dept-header accent-coral">
                         <div class="dept-icon">🚨</div>
                         <h3>急诊科</h3>
                     </div>
@@ -669,8 +926,8 @@
                     </div>
                 </div>
 
-                <div class="dept-card">
-                    <div class="dept-header" style="background: linear-gradient(135deg, var(--seaweed), #40916c);">
+                <div class="glass dept-card animate-on-scroll delay-3">
+                    <div class="dept-header accent-mint">
                         <div class="dept-icon">🔪</div>
                         <h3>外科</h3>
                     </div>
@@ -685,8 +942,8 @@
                     </div>
                 </div>
 
-                <div class="dept-card">
-                    <div class="dept-header" style="background: linear-gradient(135deg, var(--shell), #f4d58d);">
+                <div class="glass dept-card animate-on-scroll delay-1">
+                    <div class="dept-header accent-gold">
                         <div class="dept-icon">🩺</div>
                         <h3>内科</h3>
                     </div>
@@ -701,8 +958,8 @@
                     </div>
                 </div>
 
-                <div class="dept-card">
-                    <div class="dept-header" style="background: linear-gradient(135deg, #9b5de5, #c77dff);">
+                <div class="glass dept-card animate-on-scroll delay-2">
+                    <div class="dept-header accent-purple">
                         <div class="dept-icon">👶</div>
                         <h3>儿科</h3>
                     </div>
@@ -717,8 +974,8 @@
                     </div>
                 </div>
 
-                <div class="dept-card">
-                    <div class="dept-header" style="background: linear-gradient(135deg, #00b4d8, #48cae4);">
+                <div class="glass dept-card animate-on-scroll delay-3">
+                    <div class="dept-header accent-blue">
                         <div class="dept-icon">💅</div>
                         <h3>美容科</h3>
                     </div>
@@ -737,15 +994,17 @@
 
         <!-- Inpatient Page -->
         <div class="page" id="inpatient">
-            <section class="hero">
-                <div class="hero-lobster">🛏️</div>
-                <h1>住院部 <span>病房</span></h1>
-                <p>舒适温馨的住院环境，让您的虾虾快快康复</p>
+            <section class="hero glass animate-on-scroll">
+                <div class="hero-content">
+                    <div class="hero-lobster">🛏️</div>
+                    <h1>住院部 <span>病房</span></h1>
+                    <p>舒适温馨的住院环境，让您的虾虾快快康复</p>
+                </div>
             </section>
 
             <div class="room-grid">
-                <div class="room-card">
-                    <div class="room-image">🌊</div>
+                <div class="glass room-card animate-on-scroll delay-1">
+                    <div class="room-image gradient-ocean">🌊</div>
                     <div class="room-content">
                         <span class="room-type">标准间</span>
                         <h3>普通病房</h3>
@@ -760,115 +1019,5 @@
                     </div>
                 </div>
 
-                <div class="room-card">
-                    <div class="room-image" style="background: linear-gradient(135deg, var(--shell), #f4d58d);">🌟</div>
-                    <div class="room-content">
-                        <span class="room-type vip">VIP</span>
-                        <h3>豪华病房</h3>
-                        <div class="room-features">
-                            <span class="room-feature">超大空间</span>
-                            <span class="room-feature">按摩系统</span>
-                            <span class="room-feature">专属护理</span>
-                            <span class="room-feature">营养配餐</span>
-                            <span class="room-feature">家庭探视</span>
-                        </div>
-                        <div class="room-price">¥588 <span>/ 天</span></div>
-                        <button class="book-btn">立即预约</button>
-                    </div>
-                </div>
-
-                <div class="room-card">
-                    <div class="room-image" style="background: linear-gradient(135deg, var(--coral), #ff8e8e);">💔</div>
-                    <div class="room-content">
-                        <span class="room-type icu">ICU</span>
-                        <h3>重症监护</h3>
-                        <div class="room-features">
-                            <span class="room-feature">生命体征监测</span>
-                            <span class="room-feature">呼吸机支持</span>
-                            <span class="room-feature">专业护理团队</span>
-                            <span class="room-feature">随时抢救</span>
-                        </div>
-                        <div class="room-price">¥888 <span>/ 天</span></div>
-                        <button class="book-btn">立即预约</button>
-                    </div>
-                </div>
-
-                <div class="room-card">
-                    <div class="room-image" style="background: linear-gradient(135deg, var(--seaweed), #40916c);">🌿</div>
-                    <div class="room-content">
-                        <span class="room-type">休养室</span>
-                        <h3>康复修养</h3>
-                        <div class="room-features">
-                            <span class="room-feature">生态模拟环境</span>
-                            <span class="room-feature">康复训练</span>
-                            <span class="room-feature">心理疏导</span>
-                            <span class="room-feature">阳光区</span>
-                        </div>
-                        <div class="room-price">¥288 <span>/ 天</span></div>
-                        <button class="book-btn">立即预约</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-logo">🦞 小龙虾医院</div>
-            <div class="footer-info">
-                <p>📍 虾虾市虾湖区虾路188号</p>
-                <p>📞 急诊热线: 888-🦞-8888</p>
-                <p>🕐 门诊时间: 8:00 - 20:00 (全年无休)</p>
-            </div>
-            <div class="emergency">
-                <h4>🚨 24小时急诊热线</h4>
-                <p>888-🦞-8888 (如有紧急情况请立即拨打)</p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Create floating bubbles
-        function createBubbles() {
-            const container = document.getElementById('bubbles');
-            const bubbleCount = 15;
-
-            for (let i = 0; i < bubbleCount; i++) {
-                const bubble = document.createElement('div');
-                bubble.className = 'bubble';
-                const size = Math.random() * 30 + 10;
-                bubble.style.width = size + 'px';
-                bubble.style.height = size + 'px';
-                bubble.style.left = Math.random() * 100 + '%';
-                bubble.style.animationDuration = (Math.random() * 10 + 8) + 's';
-                bubble.style.animationDelay = (Math.random() * 10) + 's';
-                container.appendChild(bubble);
-            }
-        }
-
-        // Navigation
-        const navBtns = document.querySelectorAll('.nav-btn');
-        const pages = document.querySelectorAll('.page');
-
-        function navigateTo(pageId) {
-            navBtns.forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
-
-            pages.forEach(page => page.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        navBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                navigateTo(btn.dataset.page);
-            });
-        });
-
-        // Initialize
-        createBubbles();
-    </script>
-</body>
-</html>
+                <div class="glass room-card animate-on-scroll delay-2">
+                    <div class="room-image gradient-gold
